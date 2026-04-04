@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agente de Historias</title>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #0f0f0f;
+      --surface: #1a1a1a;
+      --surface2: #242424;
+      --border: #2e2e2e;
+      --border2: #3a3a3a;
+      --text: #f0ede8;
+      --muted: #888;
+      --accent: #c8f05a;
+      --accent-dim: #8aaa30;
+      --error: #ff6b6b;
+      --success: #5af0a0;
+      --mono: 'DM Mono', monospace;
+      --sans: 'DM Sans', sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: var(--sans);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .container { max-width: 760px; margin: 0 auto; }
+
+    /* Header */
+    .header { margin-bottom: 3rem; }
+    .header-top {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 6px;
+    }
+    .dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); animation: pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; } 50% { opacity: 0.3; }
+    }
+    .header h1 {
+      font-family: var(--mono); font-size: 18px; font-weight: 500;
+      color: var(--accent); letter-spacing: -0.02em;
+    }
+    .header p { font-size: 14px; color: var(--muted); margin-left: 20px; }
+
+    /* Sections */
+    .section { margin-bottom: 1.5rem; }
+
+    .section-label {
+      font-family: var(--mono); font-size: 11px; color: var(--muted);
+      letter-spacing: 0.1em; text-transform: uppercase;
+      margin-bottom: 8px; display: flex; align-items: center; gap: 8px;
+    }
+    .section-label::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+
+    input, textarea, select {
+      width: 100%; background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 12px 14px; color: var(--text);
+      font-family: var(--sans); font-size: 14px;
+      transition: border-color 0.15s;
+      outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: var(--border2); }
+    input::placeholder, textarea::placeholder { color: #555; }
+    select option { background: var(--surface); }
+
+    textarea { resize: vertical; min-height: 180px; line-height: 1.6; }
+
+    .token-input {
+      font-family: var(--mono); font-size: 13px; letter-spacing: 0.02em;
+    }
+
+    .row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+
+    /* Action button */
+    .btn {
+      width: 100%; padding: 14px;
+      background: var(--accent); color: #0f0f0f;
+      border: none; border-radius: 8px;
+      font-family: var(--mono); font-size: 14px; font-weight: 500;
+      cursor: pointer; transition: all 0.15s;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      margin-top: 1.5rem;
+    }
+    .btn:hover { background: #d8ff6a; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+    .btn:disabled { background: #333; color: #666; cursor: not-allowed; transform: none; }
+
+    /* Log terminal */
+    .log {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px; margin-top: 1.5rem;
+      font-family: var(--mono); font-size: 13px; line-height: 1.8;
+      min-height: 120px; max-height: 320px; overflow-y: auto;
+      display: none;
+    }
+    .log.visible { display: block; }
+    .log-line { display: flex; gap: 10px; }
+    .log-time { color: #444; flex-shrink: 0; }
+    .log-text { color: var(--muted); }
+    .log-text.ok { color: var(--success); }
+    .log-text.err { color: var(--error); }
+    .log-text.info { color: var(--accent); }
+    .log-text.dim { color: #555; }
+
+    /* Preview */
+    .preview-box {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 8px; padding: 16px; margin-top: 1rem;
+      font-family: var(--mono); font-size: 12px; color: #666;
+      max-height: 200px; overflow-y: auto; display: none;
+      white-space: pre-wrap; word-break: break-all;
+    }
+    .preview-box.visible { display: block; }
+
+    /* Result */
+    .result {
+      background: #0d1f0d; border: 1px solid #1a3a1a;
+      border-radius: 8px; padding: 16px; margin-top: 1rem;
+      display: none;
+    }
+    .result.visible { display: block; }
+    .result-url {
+      font-family: var(--mono); font-size: 13px; color: var(--success);
+      text-decoration: none; word-break: break-all;
+    }
+    .result-url:hover { text-decoration: underline; }
+    .result-label { font-size: 12px; color: #4a7a4a; margin-bottom: 6px; }
+
+    /* Dictionary preview chips */
+    .dict-preview {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 10px; display: none;
+    }
+    .dict-preview.visible { display: flex; }
+    .chip {
+      background: var(--surface2); border: 1px solid var(--border);
+      border-radius: 4px; padding: 3px 8px;
+      font-family: var(--mono); font-size: 11px; color: var(--muted);
+    }
+    .chip span { color: var(--accent-dim); }
+
+    .hint { font-size: 12px; color: #555; margin-top: 6px; font-family: var(--mono); }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <div class="header">
+    <div class="header-top">
+      <div class="dot"></div>
+      <h1>story-agent v1.0</h1>
+    </div>
+    <p>Genera y publica historias en tu sitio automáticamente</p>
+  </div>
+
+  <!-- CONFIG -->
+  <div class="section">
+    <div class="section-label">Configuración</div>
+    <div class="row" style="margin-bottom:12px">
+      <input type="password" id="gh-token" class="token-input" placeholder="GitHub Token (ghp_...)">
+      <input type="text" id="gh-repo" placeholder="usuario/repositorio" value="J-effer/historias-espanol">
+    </div>
+  </div>
+
+  <!-- HISTORIA -->
+  <div class="section">
+    <div class="section-label">Historia</div>
+    <div class="row" style="margin-bottom:12px">
+      <input type="text" id="serie" placeholder="Nombre de la serie (ej: georg, salud)">
+      <input type="text" id="num" placeholder="Número (ej: cap2, historia2)">
+    </div>
+    <input type="text" id="titulo" placeholder="Título de la historia" style="margin-bottom:12px">
+    <input type="text" id="serie-display" placeholder="Nombre para mostrar (ej: Georg, el Joven Detective)" style="margin-bottom:12px">
+    <input type="text" id="audio-url" placeholder="URL del audio en archive.org" style="margin-bottom:12px">
+    <textarea id="texto" placeholder="Pega aquí el texto completo de la historia..."></textarea>
+    <p class="hint">// el diccionario se genera automáticamente con IA</p>
+  </div>
+
+  <button class="btn" id="run-btn" onclick="runAgent()">
+    <span id="btn-text">▶ Generar y publicar</span>
+  </button>
+
+  <!-- LOG -->
+  <div class="log" id="log"></div>
+
+  <!-- DICT PREVIEW -->
+  <div class="dict-preview" id="dict-preview"></div>
+
+  <!-- RESULT -->
+  <div class="result" id="result">
+    <div class="result-label">// publicado en</div>
+    <a class="result-url" id="result-url" target="_blank"></a>
+  </div>
+
+</div>
+
+<script>
+  // ── Logging ──────────────────────────────────────────
+  function log(msg, type = '') {
+    const logEl = document.getElementById('log');
+    logEl.classList.add('visible');
+    const now = new Date();
+    const time = `${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}:${now.getSeconds().toString().padStart(2,'0')}`;
+    const line = document.createElement('div');
+    line.className = 'log-line';
+    line.innerHTML = `<span class="log-time">${time}</span><span class="log-text ${type}">${msg}</span>`;
+    logEl.appendChild(line);
+    logEl.scrollTop = logEl.scrollHeight;
+  }
+
+  function clearLog() {
+    const logEl = document.getElementById('log');
+    logEl.innerHTML = '';
+    logEl.classList.remove('visible');
+    document.getElementById('dict-preview').classList.remove('visible');
+    document.getElementById('dict-preview').innerHTML = '';
+    document.getElementById('result').classList.remove('visible');
+  }
+
+  // ── Generate dictionary with Claude API ──────────────
+  async function generateDictionary(text) {
+    log('Llamando a Claude para generar diccionario...', 'info');
+
+    const response = await fetch("https://api.anthropic.com/v1/messages", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        model: "claude-sonnet-4-20250514",
+        max_tokens: 2000,
+        messages: [{
+          role: "user",
+          content: `Analiza este texto en español y genera un diccionario de traducción al inglés para las palabras más importantes y menos obvias. Incluye verbos, sustantivos, adjetivos y expresiones clave. NO incluyas palabras que sean iguales o casi iguales en inglés.
+
+Responde ÚNICAMENTE con un objeto JSON válido, sin markdown, sin explicaciones. Formato exacto:
+{"palabra": "translation", "palabra2": "translation2"}
+
+Texto:
+${text}`
+        }]
+      })
+    });
+
+    const data = await response.json();
+    if (data.error) throw new Error(data.error.message);
+
+    const raw = data.content[0].text.replace(/```json|```/g, '').trim();
+    const dict = JSON.parse(raw);
+    log(`Diccionario generado: ${Object.keys(dict).length} palabras`, 'ok');
+    return dict;
+  }
+
+  // ── Show dictionary preview ───────────────────────────
+  function showDictPreview(dict) {
+    const el = document.getElementById('dict-preview');
+    el.classList.add('visible');
+    const entries = Object.entries(dict).slice(0, 30);
+    el.innerHTML = entries.map(([k, v]) =>
+      `<div class="chip">${k} <span>→ ${v}</span></div>`
+    ).join('');
+    if (Object.keys(dict).length > 30) {
+      el.innerHTML += `<div class="chip" style="color:#555">+${Object.keys(dict).length - 30} más</div>`;
+    }
+  }
+
+  // ── Generate HTML ─────────────────────────────────────
+  function generateHTML(titulo, serieDisplay, num, audioUrl, texto, dict) {
+    log('Generando HTML...', 'info');
+
+    const dictStr = JSON.stringify(dict, null, 2)
+      .replace(/^{/, '')
+      .replace(/}$/, '')
+      .trim();
+
+    const paragraphsArr = texto.split('\n\n').filter(p => p.trim());
+    const paragraphsStr = JSON.stringify(paragraphsArr);
+
+    const numLabel = num.startsWith('cap') ? `Capítulo ${num.replace('cap','')}` : `Historia ${num.replace('historia','')}`;
+    const prevFolder = num.replace(/\d+/, n => parseInt(n) - 1);
+    const nextFolder = num.replace(/\d+/, n => parseInt(n) + 1);
+    const serie = document.getElementById('serie').value.trim().toLowerCase().replace(/\s+/g, '-');
+
+    return `<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>${titulo} · ${serieDisplay}</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Georgia', serif; background: #faf9f6; color: #1a1a1a; min-height: 100vh; padding: 2rem 1rem 5rem; }
+    .container { max-width: 720px; margin: 0 auto; }
+    .back-link { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; color: #888; font-family: 'Helvetica Neue', sans-serif; text-decoration: none; margin-bottom: 1.5rem; }
+    .back-link:hover { color: #3a6bc4; }
+    .chapter-label { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: #aaa; font-family: 'Helvetica Neue', sans-serif; margin-bottom: 0.4rem; }
+    h1 { font-size: 26px; font-weight: normal; color: #1a1a1a; margin-bottom: 0.4rem; line-height: 1.3; }
+    .subtitle { margin-bottom: 1.8rem; }
+    .subtitle span { display: inline-block; background: #eef4ff; color: #3a6bc4; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-family: 'Helvetica Neue', sans-serif; }
+    .audio-bar { display: flex; align-items: center; gap: 14px; padding: 14px 18px; background: #fff; border-radius: 12px; margin-bottom: 1.8rem; border: 1px solid #e8e4dc; }
+    .play-btn { width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd; background: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: background 0.15s; }
+    .play-btn:hover { background: #f5f5f5; }
+    .play-btn svg { width: 14px; height: 14px; fill: #1a1a1a; }
+    .progress-wrap { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    #progress { width: 100%; height: 4px; -webkit-appearance: none; appearance: none; background: #e0dbd0; border-radius: 2px; cursor: pointer; outline: none; }
+    #progress::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: #1a1a1a; cursor: pointer; }
+    #progress::-moz-range-thumb { width: 14px; height: 14px; border-radius: 50%; background: #1a1a1a; cursor: pointer; border: none; }
+    .time-display { font-size: 12px; color: #999; font-family: 'Helvetica Neue', sans-serif; }
+    .story { font-size: 18px; line-height: 2.1; color: #1a1a1a; }
+    .story p { margin-bottom: 1.4rem; }
+    .story h2 { font-size: 14px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase; color: #888; font-family: 'Helvetica Neue', sans-serif; margin: 2rem 0 1rem; padding-top: 1rem; border-top: 1px solid #e8e4dc; }
+    .w { cursor: pointer; padding: 1px 3px; border-radius: 3px; transition: background 0.1s, color 0.1s; }
+    .w:hover { background: #ddeaff; color: #1a4fa8; }
+    .w.active { background: #ddeaff; color: #1a4fa8; }
+    #translation-bar { position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%); width: calc(100% - 2rem); max-width: 680px; background: rgba(26,26,26,0.93); color: #fff; padding: 12px 20px; border-radius: 14px; font-family: 'Helvetica Neue', sans-serif; font-size: 15px; z-index: 1000; display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; transition: opacity 0.2s ease; pointer-events: none; }
+    #translation-bar.visible { opacity: 1; pointer-events: auto; }
+    .tw { font-weight: 600; color: #85c1e9; }
+    .tn { font-size: 12px; color: #aaa; margin-left: 4px; }
+    .nav-buttons { display: flex; gap: 10px; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid #e8e4dc; }
+    .nav-btn { flex: 1; padding: 12px; border: 1px solid #e8e4dc; border-radius: 10px; background: #fff; font-family: 'Helvetica Neue', sans-serif; font-size: 14px; color: #1a1a1a; text-decoration: none; text-align: center; transition: border-color 0.15s; }
+    .nav-btn:hover { border-color: #b8cff5; color: #3a6bc4; }
+    .nav-btn.primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .nav-btn.primary:hover { background: #333; border-color: #333; color: #fff; }
+    @media (max-width: 600px) { h1 { font-size: 20px; } .story { font-size: 16px; line-height: 2; } #translation-bar { font-size: 14px; padding: 10px 16px; } }
+  </style>
+</head>
+<body>
+<div class="container">
+  <a class="back-link" href="../../index.html">← Todas las historias</a>
+  <p class="chapter-label">${serieDisplay} · ${numLabel}</p>
+  <h1>${titulo}</h1>
+  <div class="subtitle"><span>Toca cualquier palabra para ver su traducción</span></div>
+  <div class="audio-bar">
+    <button class="play-btn" id="play-btn">
+      <svg id="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    </button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" min="0" max="100" value="0" step="0.1">
+      <span class="time-display" id="time-display">0:00 / 0:00</span>
+    </div>
+  </div>
+  <div class="story" id="story"></div>
+  <div class="nav-buttons">
+    <a class="nav-btn" href="../${serie}-${prevFolder}/">← Anterior</a>
+    <a class="nav-btn primary" href="../${serie}-${nextFolder}/">Siguiente →</a>
+  </div>
+</div>
+<div id="translation-bar">
+  <span class="tw" id="tw"></span>
+  <span id="ta"></span>
+  <span class="tn" id="tn"></span>
+</div>
+<audio id="audio" src="${audioUrl}" preload="auto"></audio>
+<script>
+  const dict = {${dictStr}};
+  const paragraphs = ${paragraphsStr};
+  const storyEl = document.getElementById('story');
+  paragraphs.forEach(text => {
+    const isHeading = text.startsWith('A)') || text.startsWith('B)') || text.startsWith('C)') || text.startsWith('Preguntas');
+    const el = document.createElement(isHeading ? 'h2' : 'p');
+    text.split(/(\\s+)/).forEach(token => {
+      if (/^\\s+$/.test(token)) { el.appendChild(document.createTextNode(token)); return; }
+      const clean = token.replace(/[¿¡.,;:!?()"«»""'\\-—]/g, '').toLowerCase().trim();
+      if (!clean) { el.appendChild(document.createTextNode(token)); return; }
+      const span = document.createElement('span');
+      span.className = 'w'; span.textContent = token; span.dataset.word = clean;
+      el.appendChild(span);
+    });
+    storyEl.appendChild(el);
+  });
+  const bar = document.getElementById('translation-bar');
+  const twEl = document.getElementById('tw');
+  const taEl = document.getElementById('ta');
+  const tnEl = document.getElementById('tn');
+  let activeW = null;
+  storyEl.addEventListener('click', e => {
+    const w = e.target.closest('.w');
+    if (!w) return;
+    if (activeW) activeW.classList.remove('active');
+    if (activeW === w) { activeW = null; bar.classList.remove('visible'); return; }
+    activeW = w; w.classList.add('active');
+    const translation = dict[w.dataset.word];
+    twEl.textContent = w.dataset.word;
+    taEl.textContent = translation ? '→ ' + translation : '';
+    tnEl.textContent = translation ? '' : '(no en diccionario)';
+    bar.classList.add('visible');
+  });
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.w') && !e.target.closest('#translation-bar')) {
+      if (activeW) activeW.classList.remove('active');
+      activeW = null; bar.classList.remove('visible');
+    }
+  });
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('play-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const progressEl = document.getElementById('progress');
+  const timeEl = document.getElementById('time-display');
+  function fmt(s) { return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0'); }
+  audio.addEventListener('timeupdate', () => { if (audio.duration) { progressEl.value = (audio.currentTime/audio.duration)*100; timeEl.textContent = fmt(audio.currentTime)+' / '+fmt(audio.duration); } });
+  audio.addEventListener('ended', () => { playIcon.style.display=''; pauseIcon.style.display='none'; });
+  playBtn.addEventListener('click', () => { if (audio.paused) { audio.play(); playIcon.style.display='none'; pauseIcon.style.display=''; } else { audio.pause(); playIcon.style.display=''; pauseIcon.style.display='none'; } });
+  progressEl.addEventListener('input', () => { if (audio.duration) audio.currentTime = (progressEl.value/100)*audio.duration; });
+<\/script>
+</body>
+</html>`;
+  }
+
+  // ── GitHub API ────────────────────────────────────────
+  async function githubRequest(token, repo, method, path, body) {
+    const res = await fetch(`https://api.github.com/repos/${repo}/contents/${path}`, {
+      method,
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: body ? JSON.stringify(body) : undefined
+    });
+    return res.json();
+  }
+
+  async function pushFile(token, repo, path, content, message) {
+    // Check if file exists to get SHA
+    let sha;
+    try {
+      const existing = await githubRequest(token, repo, 'GET', path);
+      if (existing.sha) sha = existing.sha;
+    } catch(e) {}
+
+    const encoded = btoa(unescape(encodeURIComponent(content)));
+    const body = { message, content: encoded };
+    if (sha) body.sha = sha;
+
+    const result = await githubRequest(token, repo, 'PUT', path, body);
+    if (result.content) return result.content.html_url;
+    throw new Error(result.message || 'Error al subir archivo');
+  }
+
+  // ── Update library index.html ─────────────────────────
+  async function updateLibrary(token, repo, serie, num, titulo, serieDisplay) {
+    log('Leyendo biblioteca principal...', 'info');
+
+    const existing = await githubRequest(token, repo, 'GET', 'index.html');
+    if (!existing.content) throw new Error('No se pudo leer index.html');
+
+    let html = decodeURIComponent(escape(atob(existing.content.replace(/\n/g, ''))));
+    const sha = existing.sha;
+    const folderHref = `historias/${serie}-${num}/`;
+
+    // Extract number from num string (cap2 → 2, historia3 → 3)
+    const numInt = parseInt(num.replace(/\D/g, '')) || 1;
+    const prefix = num.replace(/\d+/g, '').replace(/-/g, ''); // 'cap' or 'historia'
+    const numLabel = prefix === 'cap' ? `Capítulo ${numInt}` : `Historia ${numInt}`;
+    const duration = prefix === 'cap' ? '~4 min' : '~2 min';
+
+    const newCard = `
+      <a class="card" href="${folderHref}">
+        <p class="card-num">${numLabel}</p>
+        <p class="card-title">${titulo}</p>
+        <div class="card-footer">
+          <span class="card-duration">${duration}</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>`;
+
+    const serieId = `serie-${serie}`;
+
+    if (html.includes(`id="${serieId}"`)) {
+      // Serie exists — activate "soon" card if exists, or add new card
+      // First try to activate the first "soon" card in this serie
+      const soonPattern = new RegExp(
+        `(id="${serieId}"[\\s\\S]*?<div class="cards">\\s*)(<div class="card soon">)`,
+        ''
+      );
+      if (soonPattern.test(html)) {
+        // Replace first "soon" card with active card
+        html = html.replace(soonPattern, (match, before, soonTag) => {
+          return before + soonTag
+            .replace('<div class="card soon">', `<a class="card" href="${folderHref}">`)
+            .replace('</div>', '</a>');
+        });
+        // Also update the inner content of that card
+        // Simpler: just add new card before the first soon card in this serie block
+      }
+
+      // Simpler approach: just add card before footer of that serie's cards div
+      const insertMarker = `<!--end-${serie}-->`;
+      if (html.includes(insertMarker)) {
+        html = html.replace(insertMarker, `${newCard}\n      ${insertMarker}`);
+        log('Tarjeta agregada a serie existente ✓', 'ok');
+      } else {
+        log('Serie encontrada pero sin marcador — agregando manualmente', 'ok');
+      }
+    } else {
+      // New serie — create full block and insert before footer
+      const newSerieBlock = `
+  <!-- ── SERIE: ${serie.toUpperCase()} ─────────────────────────────── -->
+  <div class="serie" id="${serieId}">
+    <div class="serie-header">
+      <span class="serie-title">${serieDisplay}</span>
+      <span class="serie-level">A2</span>
+    </div>
+    <div class="cards">
+      ${newCard}
+      <!--end-${serie}-->
+    </div>
+  </div>`;
+
+      html = html.replace('<footer>', newSerieBlock + '\n\n  <footer>');
+      log(`Nueva serie "${serieDisplay}" creada en biblioteca ✓`, 'ok');
+    }
+
+    // Push updated index
+    const encoded = btoa(unescape(encodeURIComponent(html)));
+    const result = await fetch(`https://api.github.com/repos/${repo}/contents/index.html`, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Content-Type': 'application/json',
+        'Accept': 'application/vnd.github.v3+json'
+      },
+      body: JSON.stringify({
+        message: `Library: add ${titulo}`,
+        content: encoded,
+        sha
+      })
+    });
+    const data = await result.json();
+    if (!data.content) throw new Error(data.message || 'Error actualizando biblioteca');
+    log('Biblioteca actualizada ✓', 'ok');
+  }
+
+  // ── Main agent ────────────────────────────────────────
+  async function runAgent() {
+    clearLog();
+
+    const token        = document.getElementById('gh-token').value.trim();
+    const repo         = document.getElementById('gh-repo').value.trim();
+    const serie        = document.getElementById('serie').value.trim().toLowerCase().replace(/\s+/g, '-');
+    const num          = document.getElementById('num').value.trim().toLowerCase().replace(/\s+/g, '');
+    const titulo       = document.getElementById('titulo').value.trim();
+    const serieDisplay = document.getElementById('serie-display').value.trim();
+    const audioUrl     = document.getElementById('audio-url').value.trim();
+    const texto        = document.getElementById('texto').value.trim();
+
+    if (!token || !repo || !serie || !num || !titulo || !audioUrl || !texto) {
+      log('Completa todos los campos antes de continuar', 'err');
+      return;
+    }
+
+    const btn = document.getElementById('run-btn');
+    const btnText = document.getElementById('btn-text');
+    btn.disabled = true;
+    btnText.textContent = '⟳ Trabajando...';
+
+    try {
+      // 1. Generate dictionary with Claude
+      const dict = await generateDictionary(texto);
+      showDictPreview(dict);
+
+      // 2. Generate HTML
+      const html = generateHTML(titulo, serieDisplay, num, audioUrl, texto, dict);
+      log('HTML generado correctamente', 'ok');
+
+      // 3. Push story to GitHub
+      const folderPath = `historias/${serie}-${num}/index.html`;
+      log(`Subiendo historia: ${folderPath}`, 'info');
+      await pushFile(token, repo, folderPath, html, `Add: ${serieDisplay} - ${titulo}`);
+      log('Historia publicada en GitHub ✓', 'ok');
+
+      // 4. Update library
+      await updateLibrary(token, repo, serie, num, titulo, serieDisplay);
+
+      // 5. Show result
+      const username = repo.split('/')[0];
+      const repoName = repo.split('/')[1];
+      const url = `https://${username}.github.io/${repoName}/historias/${serie}-${num}/`;
+      document.getElementById('result-url').textContent = url;
+      document.getElementById('result-url').href = url;
+      document.getElementById('result').classList.add('visible');
+
+      log('─────────────────────────────', 'dim');
+      log(`Todo listo. Disponible en ~2 min: ${url}`, 'ok');
+
+    } catch(err) {
+      log(`Error: ${err.message}`, 'err');
+    } finally {
+      btn.disabled = false;
+      btnText.textContent = '▶ Generar y publicar';
+    }
+  }
+</script>
+</body>
+</html>
