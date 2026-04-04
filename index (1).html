@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Historias en Español</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Georgia', serif;
+      background: #faf9f6;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 2.5rem 1rem 4rem;
+    }
+
+    .container { max-width: 760px; margin: 0 auto; }
+
+    .site-label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #aaa;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin-bottom: 0.5rem;
+    }
+
+    h1 {
+      font-size: 30px;
+      font-weight: normal;
+      color: #1a1a1a;
+      margin-bottom: 0.3rem;
+    }
+
+    .tagline {
+      font-size: 15px;
+      color: #888;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin-bottom: 3rem;
+    }
+
+    /* Serie block */
+    .serie { margin-bottom: 3rem; }
+
+    .serie-header {
+      display: flex;
+      align-items: baseline;
+      gap: 12px;
+      margin-bottom: 1rem;
+      padding-bottom: 10px;
+      border-bottom: 1px solid #e8e4dc;
+    }
+
+    .serie-title {
+      font-size: 19px;
+      font-weight: normal;
+      color: #1a1a1a;
+    }
+
+    .serie-level {
+      font-size: 11px;
+      font-family: 'Helvetica Neue', sans-serif;
+      background: #eef4ff;
+      color: #3a6bc4;
+      padding: 2px 9px;
+      border-radius: 20px;
+    }
+
+    /* Cards grid */
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 12px;
+    }
+
+    .card {
+      background: #fff;
+      border: 1px solid #e8e4dc;
+      border-radius: 12px;
+      padding: 16px 18px;
+      text-decoration: none;
+      color: inherit;
+      transition: border-color 0.15s, box-shadow 0.15s;
+      display: block;
+    }
+
+    .card:hover {
+      border-color: #b8cff5;
+      box-shadow: 0 2px 12px rgba(58, 107, 196, 0.08);
+    }
+
+    .card-num {
+      font-size: 11px;
+      font-family: 'Helvetica Neue', sans-serif;
+      color: #aaa;
+      margin-bottom: 4px;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+    }
+
+    .card-title {
+      font-size: 15px;
+      color: #1a1a1a;
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .card-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .card-duration {
+      font-size: 12px;
+      color: #bbb;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+
+    .card-arrow {
+      font-size: 14px;
+      color: #3a6bc4;
+    }
+
+    /* Coming soon card */
+    .card.soon {
+      opacity: 0.45;
+      pointer-events: none;
+      border-style: dashed;
+    }
+
+    .card.soon .card-num::after { content: ' · Próximamente'; }
+
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid #e8e4dc;
+      font-size: 12px;
+      color: #bbb;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <p class="site-label">Biblioteca de historias</p>
+  <h1>Historias en Español</h1>
+  <p class="tagline">Lee y escucha al mismo tiempo · Toca cualquier palabra para traducirla</p>
+
+  <!-- ── SERIE: GEORG ─────────────────────────────── -->
+  <div class="serie">
+    <div class="serie-header">
+      <span class="serie-title">Georg, el Joven Detective</span>
+      <span class="serie-level">A2</span>
+    </div>
+    <div class="cards">
+
+      <a class="card" href="historias/georg-cap1/">
+        <p class="card-num">Capítulo 1</p>
+        <p class="card-title">El Joven Detective</p>
+        <div class="card-footer">
+          <span class="card-duration">~4 min</span>
+          <span class="card-arrow">→</span>
+        </div>
+      </a>
+
+      <div class="card soon">
+        <p class="card-num">Capítulo 2</p>
+        <p class="card-title">El Misterio Comienza</p>
+        <div class="card-footer">
+          <span class="card-duration">~4 min</span>
+        </div>
+      </div>
+
+      <div class="card soon">
+        <p class="card-num">Capítulo 3</p>
+        <p class="card-title">La Pista</p>
+        <div class="card-footer">
+          <span class="card-duration">~4 min</span>
+        </div>
+      </div>
+
+      <div class="card soon">
+        <p class="card-num">Capítulo 4</p>
+        <p class="card-title">El Sospechoso</p>
+        <div class="card-footer">
+          <span class="card-duration">~4 min</span>
+        </div>
+      </div>
+
+      <div class="card soon">
+        <p class="card-num">Capítulo 5</p>
+        <p class="card-title">La Trampa</p>
+        <div class="card-footer">
+          <span class="card-duration">~4 min</span>
+        </div>
+      </div>
+
+      <div class="card soon">
+        <p class="card-num">Capítulo 6</p>
+        <p class="card-title">El Desenlace</p>
+        <div class="card-footer">
+          <span class="card-duration">~4 min</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── SERIE 2: Agrega aquí tu próxima serie ────── -->
+  <!--
+  <div class="serie">
+    <div class="serie-header">
+      <span class="serie-title">Nombre de la Historia</span>
+      <span class="serie-level">B1</span>
+    </div>
+    <div class="cards">
+      <a class="card" href="historias/nombre-cap1/">
+        ...
+      </a>
+    </div>
+  </div>
+  -->
+
+  <footer>Las traducciones son instantáneas · Sin publicidad · Hecho para aprender español</footer>
+
+</div>
+</body>
+</html>
