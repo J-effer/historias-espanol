@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TITULO_CAPITULO</title>  <!-- ← Cambia esto -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #faf9f6;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 2rem 1rem 5rem;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    .back-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      color: #888;
+      font-family: 'Helvetica Neue', sans-serif;
+      text-decoration: none;
+      margin-bottom: 1.5rem;
+    }
+    .back-link:hover { color: #3a6bc4; }
+    .chapter-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #aaa;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin-bottom: 0.4rem;
+    }
+    h1 { font-size: 26px; font-weight: normal; color: #1a1a1a; margin-bottom: 0.4rem; line-height: 1.3; }
+    .subtitle { margin-bottom: 1.8rem; }
+    .subtitle span {
+      display: inline-block;
+      background: #eef4ff;
+      color: #3a6bc4;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-family: 'Helvetica Neue', sans-serif;
+    }
+    .audio-bar {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; background: #fff;
+      border-radius: 12px; margin-bottom: 1.8rem; border: 1px solid #e8e4dc;
+    }
+    .play-btn {
+      width: 40px; height: 40px; border-radius: 50%;
+      border: 1px solid #ddd; background: #fff;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0; transition: background 0.15s;
+    }
+    .play-btn:hover { background: #f5f5f5; }
+    .play-btn svg { width: 14px; height: 14px; fill: #1a1a1a; }
+    .progress-wrap { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    #progress {
+      width: 100%; height: 4px; -webkit-appearance: none; appearance: none;
+      background: #e0dbd0; border-radius: 2px; cursor: pointer; outline: none;
+    }
+    #progress::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px;
+      border-radius: 50%; background: #1a1a1a; cursor: pointer;
+    }
+    #progress::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #1a1a1a; cursor: pointer; border: none;
+    }
+    .time-display { font-size: 12px; color: #999; font-family: 'Helvetica Neue', sans-serif; }
+    .story { font-size: 18px; line-height: 2.1; color: #1a1a1a; }
+    .story p { margin-bottom: 1.4rem; }
+    .w { cursor: pointer; padding: 1px 3px; border-radius: 3px; transition: background 0.1s, color 0.1s; }
+    .w:hover { background: #ddeaff; color: #1a4fa8; }
+    .w.active { background: #ddeaff; color: #1a4fa8; }
+    #translation-bar {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 2rem); max-width: 680px;
+      background: rgba(26,26,26,0.93); color: #fff;
+      padding: 12px 20px; border-radius: 14px;
+      font-family: 'Helvetica Neue', sans-serif; font-size: 15px;
+      z-index: 1000; display: flex; align-items: center; justify-content: center; gap: 8px;
+      opacity: 0; transition: opacity 0.2s ease; pointer-events: none;
+    }
+    #translation-bar.visible { opacity: 1; pointer-events: auto; }
+    .tw { font-weight: 600; color: #85c1e9; }
+    .tn { font-size: 12px; color: #aaa; margin-left: 4px; }
+    .nav-buttons {
+      display: flex; gap: 10px; margin-top: 3rem; padding-top: 1.5rem;
+      border-top: 1px solid #e8e4dc;
+    }
+    .nav-btn {
+      flex: 1; padding: 12px; border: 1px solid #e8e4dc; border-radius: 10px;
+      background: #fff; font-family: 'Helvetica Neue', sans-serif; font-size: 14px;
+      color: #1a1a1a; text-decoration: none; text-align: center;
+      transition: border-color 0.15s; cursor: pointer;
+    }
+    .nav-btn:hover { border-color: #b8cff5; color: #3a6bc4; }
+    .nav-btn.primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .nav-btn.primary:hover { background: #333; border-color: #333; color: #fff; }
+    @media (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .story { font-size: 16px; line-height: 2; }
+      #translation-bar { font-size: 14px; padding: 10px 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-link" href="../../index.html">← Todas las historias</a>
+
+  <!-- ↓ Cambia estos tres valores -->
+  <p class="chapter-label">NOMBRE_SERIE · Capítulo N</p>
+  <h1>TITULO_CAPITULO</h1>
+  <!-- ↑ -->
+
+  <div class="subtitle"><span>Toca cualquier palabra para ver su traducción</span></div>
+
+  <div class="audio-bar">
+    <button class="play-btn" id="play-btn">
+      <svg id="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    </button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" min="0" max="100" value="0" step="0.1">
+      <span class="time-display" id="time-display">0:00 / 0:00</span>
+    </div>
+  </div>
+
+  <div class="story" id="story"></div>
+
+  <!-- Navegación entre capítulos -->
+  <div class="nav-buttons">
+    <a class="nav-btn" href="../CAPITULO_ANTERIOR/">← Capítulo anterior</a>
+    <a class="nav-btn primary" href="../CAPITULO_SIGUIENTE/">Capítulo siguiente →</a>
+  </div>
+
+</div>
+
+<div id="translation-bar">
+  <span class="tw" id="tw"></span>
+  <span id="ta"></span>
+  <span class="tn" id="tn"></span>
+</div>
+
+<!-- ↓ Cambia "audio.mp3" por el nombre real de tu archivo de audio -->
+<audio id="audio" src="audio.mp3"></audio>
+
+<script>
+  // ════════════════════════════════════════════
+  // 1. DICCIONARIO — agrega o edita traducciones
+  // ════════════════════════════════════════════
+  const dict = {
+    // "palabra": "translation",
+    // Ejemplo:
+    "hola": "hello",
+    "mundo": "world"
+    // ... agrega todas las palabras del capítulo
+  };
+
+  // ════════════════════════════════════════════
+  // 2. TEXTO — pega los párrafos del capítulo
+  // ════════════════════════════════════════════
+  const paragraphs = [
+    "Párrafo uno del capítulo.",
+    "Párrafo dos del capítulo.",
+    // ... agrega todos los párrafos
+  ];
+
+  // ════════════════════════════════════════════
+  // NO TOQUES NADA DEBAJO DE ESTA LÍNEA
+  // ════════════════════════════════════════════
+  const storyEl = document.getElementById('story');
+  paragraphs.forEach(text => {
+    const p = document.createElement('p');
+    text.split(/(\s+)/).forEach(token => {
+      if (/^\s+$/.test(token)) { p.appendChild(document.createTextNode(token)); return; }
+      const clean = token.replace(/[¿¡.,;:!?()"«»""'\-—]/g, '').toLowerCase().trim();
+      if (!clean) { p.appendChild(document.createTextNode(token)); return; }
+      const span = document.createElement('span');
+      span.className = 'w';
+      span.textContent = token;
+      span.dataset.word = clean;
+      p.appendChild(span);
+    });
+    storyEl.appendChild(p);
+  });
+
+  const bar = document.getElementById('translation-bar');
+  const twEl = document.getElementById('tw');
+  const taEl = document.getElementById('ta');
+  const tnEl = document.getElementById('tn');
+  let activeW = null;
+
+  storyEl.addEventListener('click', e => {
+    const w = e.target.closest('.w');
+    if (!w) return;
+    if (activeW) activeW.classList.remove('active');
+    if (activeW === w) { activeW = null; bar.classList.remove('visible'); return; }
+    activeW = w;
+    w.classList.add('active');
+    const translation = dict[w.dataset.word];
+    twEl.textContent = w.dataset.word;
+    taEl.textContent = translation ? '→ ' + translation : '';
+    tnEl.textContent = translation ? '' : '(no en diccionario)';
+    bar.classList.add('visible');
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.w') && !e.target.closest('#translation-bar')) {
+      if (activeW) activeW.classList.remove('active');
+      activeW = null;
+      bar.classList.remove('visible');
+    }
+  });
+
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('play-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const progressEl = document.getElementById('progress');
+  const timeEl = document.getElementById('time-display');
+
+  function fmt(s) {
+    return `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`;
+  }
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      progressEl.value = (audio.currentTime / audio.duration) * 100;
+      timeEl.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+    }
+  });
+  audio.addEventListener('ended', () => { playIcon.style.display=''; pauseIcon.style.display='none'; });
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) { audio.play(); playIcon.style.display='none'; pauseIcon.style.display=''; }
+    else { audio.pause(); playIcon.style.display=''; pauseIcon.style.display='none'; }
+  });
+  progressEl.addEventListener('input', () => {
+    if (audio.duration) audio.currentTime = (progressEl.value / 100) * audio.duration;
+  });
+</script>
+</body>
+</html>
