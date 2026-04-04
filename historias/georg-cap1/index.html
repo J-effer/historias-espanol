@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>El Joven Detective · Capítulo 1</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Georgia', serif;
+      background: #faf9f6;
+      color: #1a1a1a;
+      min-height: 100vh;
+      padding: 2rem 1rem 5rem;
+    }
+    .container { max-width: 720px; margin: 0 auto; }
+    .back-link {
+      display: inline-flex; align-items: center; gap: 6px;
+      font-size: 13px; color: #888; font-family: 'Helvetica Neue', sans-serif;
+      text-decoration: none; margin-bottom: 1.5rem;
+    }
+    .back-link:hover { color: #3a6bc4; }
+    .chapter-label {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: #aaa; font-family: 'Helvetica Neue', sans-serif; margin-bottom: 0.4rem;
+    }
+    h1 { font-size: 26px; font-weight: normal; color: #1a1a1a; margin-bottom: 0.4rem; line-height: 1.3; }
+    .subtitle { margin-bottom: 1.8rem; }
+    .subtitle span {
+      display: inline-block; background: #eef4ff; color: #3a6bc4;
+      padding: 3px 10px; border-radius: 20px;
+      font-size: 12px; font-family: 'Helvetica Neue', sans-serif;
+    }
+    .audio-bar {
+      display: flex; align-items: center; gap: 14px;
+      padding: 14px 18px; background: #fff;
+      border-radius: 12px; margin-bottom: 1.8rem; border: 1px solid #e8e4dc;
+    }
+    .play-btn {
+      width: 40px; height: 40px; border-radius: 50%; border: 1px solid #ddd;
+      background: #fff; cursor: pointer; display: flex; align-items: center;
+      justify-content: center; flex-shrink: 0; transition: background 0.15s;
+    }
+    .play-btn:hover { background: #f5f5f5; }
+    .play-btn svg { width: 14px; height: 14px; fill: #1a1a1a; }
+    .progress-wrap { flex: 1; display: flex; flex-direction: column; gap: 6px; }
+    #progress {
+      width: 100%; height: 4px; -webkit-appearance: none; appearance: none;
+      background: #e0dbd0; border-radius: 2px; cursor: pointer; outline: none;
+    }
+    #progress::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 14px; height: 14px;
+      border-radius: 50%; background: #1a1a1a; cursor: pointer;
+    }
+    #progress::-moz-range-thumb {
+      width: 14px; height: 14px; border-radius: 50%;
+      background: #1a1a1a; cursor: pointer; border: none;
+    }
+    .time-display { font-size: 12px; color: #999; font-family: 'Helvetica Neue', sans-serif; }
+    .story { font-size: 18px; line-height: 2.1; color: #1a1a1a; }
+    .story p { margin-bottom: 1.4rem; }
+    .w { cursor: pointer; padding: 1px 3px; border-radius: 3px; transition: background 0.1s, color 0.1s; }
+    .w:hover { background: #ddeaff; color: #1a4fa8; }
+    .w.active { background: #ddeaff; color: #1a4fa8; }
+    #translation-bar {
+      position: fixed; bottom: 16px; left: 50%; transform: translateX(-50%);
+      width: calc(100% - 2rem); max-width: 680px;
+      background: rgba(26,26,26,0.93); color: #fff;
+      padding: 12px 20px; border-radius: 14px;
+      font-family: 'Helvetica Neue', sans-serif; font-size: 15px;
+      z-index: 1000; display: flex; align-items: center; justify-content: center; gap: 8px;
+      opacity: 0; transition: opacity 0.2s ease; pointer-events: none;
+    }
+    #translation-bar.visible { opacity: 1; pointer-events: auto; }
+    .tw { font-weight: 600; color: #85c1e9; }
+    .tn { font-size: 12px; color: #aaa; margin-left: 4px; }
+    .nav-buttons {
+      display: flex; gap: 10px; margin-top: 3rem; padding-top: 1.5rem;
+      border-top: 1px solid #e8e4dc;
+    }
+    .nav-btn {
+      flex: 1; padding: 12px; border: 1px solid #e8e4dc; border-radius: 10px;
+      background: #fff; font-family: 'Helvetica Neue', sans-serif; font-size: 14px;
+      color: #1a1a1a; text-decoration: none; text-align: center; transition: border-color 0.15s;
+    }
+    .nav-btn:hover { border-color: #b8cff5; color: #3a6bc4; }
+    .nav-btn.primary { background: #1a1a1a; color: #fff; border-color: #1a1a1a; }
+    .nav-btn.primary:hover { background: #333; border-color: #333; color: #fff; }
+    @media (max-width: 600px) {
+      h1 { font-size: 20px; }
+      .story { font-size: 16px; line-height: 2; }
+      #translation-bar { font-size: 14px; padding: 10px 16px; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+  <a class="back-link" href="../../index.html">← Todas las historias</a>
+
+  <p class="chapter-label">Georg, el Joven Detective · Capítulo 1</p>
+  <h1>El Joven Detective</h1>
+  <div class="subtitle"><span>Toca cualquier palabra para ver su traducción</span></div>
+
+  <div class="audio-bar">
+    <button class="play-btn" id="play-btn">
+      <svg id="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+    </button>
+    <div class="progress-wrap">
+      <input type="range" id="progress" min="0" max="100" value="0" step="0.1">
+      <span class="time-display" id="time-display">0:00 / 0:00</span>
+    </div>
+  </div>
+
+  <div class="story" id="story"></div>
+
+  <div class="nav-buttons">
+    <a class="nav-btn" href="../../index.html">← Todas las historias</a>
+    <a class="nav-btn primary" href="../georg-cap2/">Capítulo 2 →</a>
+  </div>
+
+</div>
+
+<div id="translation-bar">
+  <span class="tw" id="tw"></span>
+  <span id="ta"></span>
+  <span class="tn" id="tn"></span>
+</div>
+
+<audio id="audio" src="audio.mp3"></audio>
+
+<script>
+  const dict = {
+    "este": "this", "es": "is", "georg": "Georg", "vive": "lives", "en": "in",
+    "friburgo": "Freiburg", "una": "a / an", "hermosa": "beautiful", "ciudad": "city",
+    "al": "to the", "sur": "south", "de": "of", "alemania": "Germany", "cerca": "near",
+    "la": "the", "selva": "forest / jungle", "negra": "black", "tiene": "has",
+    "quince": "fifteen", "años": "years", "alto": "tall", "para": "for", "su": "his / her",
+    "edad": "age", "el": "the", "pelo": "hair", "rojo": "red", "y": "and", "los": "the",
+    "ojos": "eyes", "azules": "blue", "a": "to", "mayoría": "majority", "las": "the",
+    "chicas": "girls", "les": "to them", "parece": "seems", "guapo": "handsome",
+    "pero": "but", "él": "him", "eso": "that", "no": "no / not", "le": "to him",
+    "importa": "matters", "lo": "it", "único": "only", "que": "that / what",
+    "interesa": "interests", "todo": "everything", "tenga": "has", "ver": "to see",
+    "con": "with", "crimen": "crime", "últimos": "last", "dos": "two", "ha": "has",
+    "leído": "read (past)", "más": "more", "doscientos": "two hundred", "libros": "books",
+    "crímenes": "crimes", "visto": "seen", "aproximadamente": "approximately", "misma": "same",
+    "cantidad": "amount", "películas": "movies", "policíacas": "police / detective",
+    "estantería": "bookshelf", "junto": "next to", "clásicos": "classics", "como": "like / as",
+    "también": "also", "hay": "there is / are", "novelas": "novels", "autores": "authors",
+    "tan": "so", "famosos": "famous", "lado": "side", "del": "of the", "estante": "shelf",
+    "siempre": "always", "está": "is", "manual": "manual / guide", "cómo": "how",
+    "convertirse": "to become", "un": "a / an", "detective": "detective", "eficiente": "efficient",
+    "cuando": "when", "sea": "is / will be", "grande": "grown up", "quiere": "wants / loves",
+    "ser": "to be", "por": "for / by", "supuesto": "course (of course)", "o": "or",
+    "policía": "police", "se": "himself / herself", "dicho": "said / told", "sus": "his / their",
+    "padres": "parents", "muchas": "many", "veces": "times", "madre": "mother",
+    "suele": "usually", "responder": "to respond", "sí": "yes", "son": "are",
+    "solo": "only / alone", "fantasías": "fantasies", "realidad": "reality", "muy": "very",
+    "distinta": "different", "padre": "father", "incluso": "even", "llega": "gets",
+    "enfadar": "to get angry", "deberías": "you should", "pensar": "to think",
+    "escuela": "school", "esas": "those", "idióticas": "idiotic", "televisión": "television",
+    "nadie": "nobody", "entiende": "understands", "esa": "that", "familia": "family",
+    "pobre": "poor", "hermana": "sister", "llamada": "called / named", "ute": "Ute",
+    "cinco": "five", "menudo": "often (a menudo)", "aburrida": "boring", "ella": "she",
+    "jugar": "to play", "ni": "neither / nor", "tiempo": "time", "ganas": "feel like",
+    "ayer": "yesterday", "dijo": "said", "mañana": "tomorrow", "noche": "night",
+    "tu": "your", "yo": "I", "queremos": "we want", "ir": "to go", "teatro": "theater",
+    "hace": "ago / makes", "meses": "months", "veo": "I see", "supermercado": "supermarket",
+    "prácticamente": "practically", "nunca": "never", "salimos": "we go out",
+    "así": "so / like this", "vez": "time / once", "podríamos": "we could",
+    "estaba": "was", "séptimo": "seventh", "cielo": "heaven / sky", "pensó": "thought",
+    "qué": "what / how", "maravilla": "wonder", "apartamento": "apartment", "mí": "me",
+    "comer": "to eat", "quiera": "want", "respondió": "responded", "mamá": "mom",
+    "buena": "good", "idea": "idea", "id": "go (command)", "tranquilos": "don't worry",
+    "cuidaré": "I will take care", "puedo": "I can", "confiar": "to trust", "ti": "you",
+    "preguntó": "asked", "claro": "of course", "hoy": "today", "casi": "almost",
+    "casa": "home", "fueron": "went", "antes": "before", "cena": "dinner", "ya": "already",
+    "función": "show / performance", "empieza": "starts", "ocho": "eight", "lista": "ready",
+    "sobre": "on / over", "mesa": "table", "cocina": "kitchen", "salchichas": "sausages",
+    "pan": "bread", "botella": "bottle", "agua": "water", "mineral": "mineral",
+    "pudín": "pudding", "algo": "something", "banal": "ordinary", "saca": "takes out",
+    "palomitas": "popcorn", "patatas": "potatoes", "fritas": "fried", "latas": "cans",
+    "cola": "cola", "armario": "cupboard", "planta": "stands (se planta)", "frente": "in front of",
+    "televisor": "TV set", "esto": "this", "vida": "life", "tele": "TV", "dan": "they show",
+    "expediente": "file / dossier", "series": "series", "favoritas": "favorite",
+    "hermanita": "little sister", "sienta": "sits", "media": "half", "hora": "hour",
+    "quedado": "stayed", "dormida": "asleep", "durante": "during", "anuncios": "commercials",
+    "va": "goes", "buscar": "to look for", "provisiones": "snacks / supplies",
+    "repente": "sudden (de repente = suddenly)", "escucha": "hears / listens", "ruido": "noise",
+    "viene": "comes", "oye": "hears", "caer": "to fall", "grito": "scream", "corto": "short",
+    "luego": "then", "nada": "nothing", "vaya": "wow / well", "mientras": "while",
+    "unta": "spreads", "vuelve": "returns", "ruidos": "noises", "serán": "they must be",
+    "vecinos": "neighbors", "acerca": "approaches", "puerta": "door", "mira": "looks",
+    "mirilla": "peephole", "hombre": "man", "vecino": "neighbor", "hacia": "towards",
+    "afuera": "outside", "alguien": "someone", "extraño": "strange", "dice": "says",
+    "mismo": "himself / same", "estará": "must be", "pasando": "happening", "ahí": "there",
+    "ese": "that", "momento": "moment", "suena": "rings", "teléfono": "telephone",
+    "naturalmente": "naturally", "preguntando": "asking", "si": "if", "orden": "order",
+    "estarán": "will be", "medianoche": "midnight", "vale": "okay", "problema": "problem",
+    "tampoco": "neither / either", "allí": "there", "piensa": "thinks", "acercarse": "to approach"
+  };
+
+  const paragraphs = [
+    "Este es Georg. Vive en Friburgo, una hermosa ciudad al sur de Alemania, cerca de la Selva Negra. Georg tiene quince años. Es alto para su edad, tiene el pelo rojo y los ojos azules. A la mayoría de las chicas les parece guapo, pero a él eso no le importa; lo único que le interesa es todo lo que tenga que ver con el crimen.",
+    "En los últimos dos años, ha leído más de doscientos libros de crímenes y ha visto aproximadamente la misma cantidad de películas policíacas. En su estantería, junto a los clásicos como Agatha Christie, Simenon y Chandler, también hay novelas de autores no tan famosos. Al lado del estante siempre está su manual: \"Cómo convertirse en un detective eficiente\".",
+    "Cuando sea grande, Georg quiere ser, por supuesto, detective o policía. Se lo ha dicho a sus padres muchas veces. Su madre suele responder: \"Sí, sí, Georg... eso son solo fantasías. La realidad es muy distinta\".",
+    "Su padre incluso se llega a enfadar: \"Deberías pensar más en la escuela, Georg, y no ver siempre esas películas idióticas en la televisión\".",
+    "Nadie lo entiende en esa familia. Pobre Georg. Él tiene una hermana llamada Ute, de cinco años. Georg la quiere, pero a menudo le parece aburrida. Ella siempre quiere jugar, pero Georg no tiene ni tiempo ni ganas.",
+    "Ayer, su madre le dijo: \"Georg, mañana por la noche tu padre y yo queremos ir al teatro. Hace meses que solo veo el supermercado. Prácticamente nunca salimos, así que por una vez podríamos...\"",
+    "Georg estaba en el séptimo cielo. Pensó: \"Qué maravilla. Todo el apartamento para mí solo. Comer lo que quiera y cuando quiera, y la televisión grande solo para mí\". A su madre le respondió: \"Sí, mamá, buena idea. Id tranquilos, yo cuidaré de Ute\".",
+    "\"¿Puedo confiar en ti?\", preguntó ella. \"¡Claro que sí!\".",
+    "Así que hoy Georg está (casi) solo en casa. Sus padres se fueron antes de la cena, ya que la función empieza a las ocho. La cena ya está lista sobre la mesa de la cocina: salchichas, pan, una botella de agua mineral y pudín. Pero él no tiene ganas de comer algo tan \"banal\". Saca palomitas, patatas fritas y dos latas de cola del armario de la cocina y se planta frente al televisor. \"¡Ahhh, esto sí es vida!\".",
+    "En la tele dan \"Expediente X\", una de sus series favoritas. Su hermanita se sienta a su lado, pero a la media hora ya se ha quedado dormida. Durante los anuncios, Georg va a la cocina para buscar más provisiones. De repente, escucha un ruido. Viene del apartamento de al lado: oye algo caer, un grito corto y luego, nada más.",
+    "\"Vaya...\", piensa Georg.",
+    "Pero mientras se unta un pan con Nutella, vuelve a escuchar ruidos. \"Serán los vecinos\", piensa, y se acerca a la puerta. Mira por la mirilla: un hombre, su vecino, está en la puerta y mira hacia afuera para ver si hay alguien. \"Qué extraño\", se dice Georg a sí mismo. \"¿Qué estará pasando ahí?\".",
+    "En ese momento suena el teléfono: es (naturalmente) su madre, preguntando si todo está en orden. Luego le dice que no estarán en casa antes de medianoche.",
+    "\"Vale, vale, no hay problema\", dice Georg.",
+    "Vuelve a acercarse a la puerta, pero ya no oye nada. Y el vecino tampoco está ya allí."
+  ];
+
+  const storyEl = document.getElementById('story');
+  paragraphs.forEach(text => {
+    const p = document.createElement('p');
+    text.split(/(\s+)/).forEach(token => {
+      if (/^\s+$/.test(token)) { p.appendChild(document.createTextNode(token)); return; }
+      const clean = token.replace(/[¿¡.,;:!?()"«»""'\-—]/g, '').toLowerCase().trim();
+      if (!clean) { p.appendChild(document.createTextNode(token)); return; }
+      const span = document.createElement('span');
+      span.className = 'w'; span.textContent = token; span.dataset.word = clean;
+      p.appendChild(span);
+    });
+    storyEl.appendChild(p);
+  });
+
+  const bar = document.getElementById('translation-bar');
+  const twEl = document.getElementById('tw');
+  const taEl = document.getElementById('ta');
+  const tnEl = document.getElementById('tn');
+  let activeW = null;
+
+  storyEl.addEventListener('click', e => {
+    const w = e.target.closest('.w');
+    if (!w) return;
+    if (activeW) activeW.classList.remove('active');
+    if (activeW === w) { activeW = null; bar.classList.remove('visible'); return; }
+    activeW = w; w.classList.add('active');
+    const translation = dict[w.dataset.word];
+    twEl.textContent = w.dataset.word;
+    taEl.textContent = translation ? '→ ' + translation : '';
+    tnEl.textContent = translation ? '' : '(no en diccionario)';
+    bar.classList.add('visible');
+  });
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.w') && !e.target.closest('#translation-bar')) {
+      if (activeW) activeW.classList.remove('active');
+      activeW = null; bar.classList.remove('visible');
+    }
+  });
+
+  const audio = document.getElementById('audio');
+  const playBtn = document.getElementById('play-btn');
+  const playIcon = document.getElementById('play-icon');
+  const pauseIcon = document.getElementById('pause-icon');
+  const progressEl = document.getElementById('progress');
+  const timeEl = document.getElementById('time-display');
+
+  function fmt(s) { return `${Math.floor(s/60)}:${Math.floor(s%60).toString().padStart(2,'0')}`; }
+  audio.addEventListener('timeupdate', () => {
+    if (audio.duration) {
+      progressEl.value = (audio.currentTime / audio.duration) * 100;
+      timeEl.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration)}`;
+    }
+  });
+  audio.addEventListener('ended', () => { playIcon.style.display=''; pauseIcon.style.display='none'; });
+  playBtn.addEventListener('click', () => {
+    if (audio.paused) { audio.play(); playIcon.style.display='none'; pauseIcon.style.display=''; }
+    else { audio.pause(); playIcon.style.display=''; pauseIcon.style.display='none'; }
+  });
+  progressEl.addEventListener('input', () => {
+    if (audio.duration) audio.currentTime = (progressEl.value / 100) * audio.duration;
+  });
+</script>
+</body>
+</html>
