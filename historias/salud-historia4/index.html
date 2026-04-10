@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Historia Cuatro: La limpieza de la herida · La limpieza de la herida</title>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Georgia',serif;background:#faf9f6;color:#1a1a1a;min-height:100vh;padding:2rem 1rem 5rem}
+.container{max-width:720px;margin:0 auto}
+.back-link{display:inline-flex;align-items:center;gap:6px;font-size:13px;color:#888;font-family:'Helvetica Neue',sans-serif;text-decoration:none;margin-bottom:1.5rem}
+.back-link:hover{color:#3a6bc4}
+.chapter-label{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:#aaa;font-family:'Helvetica Neue',sans-serif;margin-bottom:.4rem}
+h1{font-size:26px;font-weight:normal;color:#1a1a1a;margin-bottom:.4rem;line-height:1.3}
+.subtitle{margin-bottom:1.8rem}
+.subtitle span{display:inline-block;background:#eef4ff;color:#3a6bc4;padding:3px 10px;border-radius:20px;font-size:12px;font-family:'Helvetica Neue',sans-serif}
+.audio-bar{display:flex;align-items:center;gap:14px;padding:14px 18px;background:#fff;border-radius:12px;margin-bottom:1.8rem;border:1px solid #e8e4dc}
+.play-btn{width:40px;height:40px;border-radius:50%;border:1px solid #ddd;background:#fff;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:background .15s}
+.play-btn:hover{background:#f5f5f5}
+.play-btn svg{width:14px;height:14px;fill:#1a1a1a}
+.progress-wrap{flex:1;display:flex;flex-direction:column;gap:6px}
+#progress{width:100%;height:4px;-webkit-appearance:none;appearance:none;background:#e0dbd0;border-radius:2px;cursor:pointer;outline:none}
+#progress::-webkit-slider-thumb{-webkit-appearance:none;width:14px;height:14px;border-radius:50%;background:#1a1a1a;cursor:pointer}
+#progress::-moz-range-thumb{width:14px;height:14px;border-radius:50%;background:#1a1a1a;cursor:pointer;border:none}
+.time-display{font-size:12px;color:#999;font-family:'Helvetica Neue',sans-serif}
+.story{font-size:18px;line-height:2.1;color:#1a1a1a}
+.story p{margin-bottom:1.4rem}
+.story h2{font-size:14px;font-weight:500;letter-spacing:.08em;text-transform:uppercase;color:#888;font-family:'Helvetica Neue',sans-serif;margin:2rem 0 1rem;padding-top:1rem;border-top:1px solid #e8e4dc}
+.w{cursor:pointer;padding:1px 3px;border-radius:3px;transition:background .1s,color .1s}
+.w:hover,.w.active{background:#ddeaff;color:#1a4fa8}
+#translation-bar{position:fixed;bottom:16px;left:50%;transform:translateX(-50%);width:calc(100% - 2rem);max-width:680px;background:rgba(26,26,26,.93);color:#fff;padding:12px 20px;border-radius:14px;font-family:'Helvetica Neue',sans-serif;font-size:15px;z-index:1000;display:flex;align-items:center;justify-content:center;gap:8px;opacity:0;transition:opacity .2s;pointer-events:none}
+#translation-bar.visible{opacity:1;pointer-events:auto}
+.tw{font-weight:600;color:#85c1e9}
+.nav-buttons{display:flex;gap:10px;margin-top:3rem;padding-top:1.5rem;border-top:1px solid #e8e4dc}
+.nav-btn{flex:1;padding:12px;border:1px solid #e8e4dc;border-radius:10px;background:#fff;font-family:'Helvetica Neue',sans-serif;font-size:14px;color:#1a1a1a;text-decoration:none;text-align:center;transition:border-color .15s}
+.nav-btn:hover{border-color:#b8cff5;color:#3a6bc4}
+.nav-btn.primary{background:#1a1a1a;color:#fff;border-color:#1a1a1a}
+.nav-btn.primary:hover{background:#333;border-color:#333;color:#fff}
+@media(max-width:600px){h1{font-size:20px}.story{font-size:16px;line-height:2}}
+</style>
+</head>
+<body>
+<div class="container">
+<a class="back-link" href="../../index.html">← Todas las historias</a>
+<p class="chapter-label">La limpieza de la herida · Historia 4</p>
+<h1>Historia Cuatro: La limpieza de la herida</h1>
+<div class="subtitle"><span>Toca cualquier palabra para ver su traducción</span></div>
+<div class="audio-bar">
+  <button class="play-btn" id="play-btn">
+    <svg id="play-icon" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+    <svg id="pause-icon" viewBox="0 0 24 24" style="display:none"><rect x="6" y="4" width="4" height="16"/><rect x="14" y="4" width="4" height="16"/></svg>
+  </button>
+  <div class="progress-wrap">
+    <input type="range" id="progress" min="0" max="100" value="0" step="0.1">
+    <span class="time-display" id="time-display">0:00 / 0:00</span>
+  </div>
+</div>
+<div class="story" id="story"></div>
+<div class="nav-buttons">
+  <a class="nav-btn" href="../salud-historia3/">← Anterior</a>
+  <a class="nav-btn primary" href="../salud-historia5/">Siguiente →</a>
+</div>
+</div>
+<div id="translation-bar"><span class="tw" id="tw"></span><span id="ta"></span></div>
+<audio id="audio" src="https://ia600909.us.archive.org/19/items/historia-4-salud_202604/Historia_4_salud.MP3" preload="auto"></audio>
+<script>
+const dict={
+    "302":"three hundred and two",
+    "historia":"history / story",
+    "cuatro":"four",
+    "la":"the",
+    "limpieza":"cleaning",
+    "de":"of / from",
+    "herida":"wound",
+    "ahora":"now",
+    "escuchemos":"let's listen",
+    "enfermera":"nurse",
+    "sofía":"Sofía",
+    "escucha":"listen",
+    "y":"and",
+    "después":"after / then",
+    "versión":"version",
+    "narración":"narration",
+    "en":"in",
+    "tercera":"third",
+    "persona":"person",
+    "entra":"enters",
+    "habitación":"room",
+    "el":"the",
+    "paciente":"patient",
+    "tiene":"has",
+    "una":"a / an",
+    "pierna":"leg",
+    "derecha":"right",
+    "está":"is",
+    "un":"a / an",
+    "poco":"little",
+    "sucia":"dirty",
+    "primero":"first",
+    "se":"himself / herself",
+    "pone":"puts (se pone = puts on)",
+    "los":"the",
+    "guantes":"gloves",
+    "ella":"she",
+    "limpia":"cleans / clean",
+    "con":"with",
+    "suero":"serum / saline",
+    "fisiológico":"physiological",
+    "gasas":"gauze",
+    "dice":"says",
+    "que":"that",
+    "le":"to him / her",
+    "duele":"hurts",
+    "zona":"zone / area",
+    "mucho":"much / a lot of",
+    "cuidado":"care / caution",
+    "finalmente":"finally",
+    "vendaje":"bandage",
+    "limpio":"clean",
+    "sobre":"on / over",
+    "protegida":"protected",
+    "b":"B",
+    "primera":"first",
+    "contada":"told",
+    "por":"by",
+    "entro":"I enter",
+    "me":"myself",
+    "pongo":"I put (me pongo = I put on)",
+    "preguntas":"questions",
+    "para":"for",
+    "repetir":"to repeat",
+    "entender":"to understand",
+    "qué":"what",
+    "dónde":"where",
+    "al":"at the",
+    "principio":"beginning",
+    "no":"no / not",
+    "manos":"hands",
+    "agua":"water",
+    "jabón":"soap",
+    "sí":"yes",
+    "final":"end"
+};
+const paras=[{"type":"p","text":"historia y después la versión de Sofía."},{"type":"h2","text":"A) Narración en tercera persona"},{"type":"p","text":"Sofía entra en la habitación 302. El paciente tiene una herida en la pierna derecha. La herida está un poco sucia. Primero, Sofía se pone los guantes. Después, ella limpia la herida con suero fisiológico y gasas. El paciente dice que le duele un poco. Sofía limpia la zona con mucho cuidado. Finalmente, ella pone un vendaje limpio sobre la pierna. La herida ahora está limpia y protegida."},{"type":"h2","text":"B) Narración en primera persona (contada por Sofía)"},{"type":"p","text":"Entro en la habitación 302. El paciente tiene una herida en la pierna derecha. La herida está un poco sucia. Primero, me pongo los guantes. Después, limpio la herida con suero fisiológico y gasas. El paciente dice que le duele un poco. Limpio la zona con mucho cuidado. Finalmente, pongo un vendaje limpio sobre la pierna. La herida ahora está limpia y protegida."},{"type":"h2","text":"Preguntas para repetir y entender"},{"type":"p","text":"¿En qué habitación está el paciente? El paciente está en la habitación 302."},{"type":"p","text":"¿Dónde tiene la herida el paciente? El paciente tiene la herida en la pierna derecha."},{"type":"p","text":"¿Está la herida limpia al principio? No, la herida no está limpia. Está un poco sucia."},{"type":"p","text":"¿Qué se pone Sofía en las manos? Sofía se pone los guantes."},{"type":"p","text":"¿Limpia Sofía la herida con agua y jabón? No, ella la limpia con suero fisiológico y gasas."},{"type":"p","text":"¿Pone Sofía un vendaje al final? Sí, ella pone un vendaje limpio sobre la pierna."}];
+const storyEl=document.getElementById('story');
+paras.forEach(({type,text})=>{
+  const el=document.createElement(type);
+  text.split(/(\s+)/).forEach(token=>{
+    if(/^\s+$/.test(token)){el.appendChild(document.createTextNode(token));return;}
+    const clean=token.replace(/[¿¡.,;:!?()"«»""'\-—]/g,'').toLowerCase().trim();
+    if(!clean){el.appendChild(document.createTextNode(token));return;}
+    const s=document.createElement('span');s.className='w';s.textContent=token;s.dataset.word=clean;el.appendChild(s);
+  });
+  storyEl.appendChild(el);
+});
+const bar=document.getElementById('translation-bar');
+const twEl=document.getElementById('tw'),taEl=document.getElementById('ta');
+let aw=null;
+storyEl.addEventListener('click',e=>{
+  const w=e.target.closest('.w');if(!w)return;
+  if(aw)aw.classList.remove('active');
+  if(aw===w){aw=null;bar.classList.remove('visible');return;}
+  aw=w;w.classList.add('active');
+  const t=dict[w.dataset.word];
+  twEl.textContent=w.dataset.word;taEl.textContent=t?'→ '+t:'(no en diccionario)';
+  bar.classList.add('visible');
+});
+document.addEventListener('click',e=>{
+  if(!e.target.closest('.w')&&!e.target.closest('#translation-bar')){if(aw)aw.classList.remove('active');aw=null;bar.classList.remove('visible');}
+});
+const audio=document.getElementById('audio'),pb=document.getElementById('play-btn');
+const pi=document.getElementById('play-icon'),pai=document.getElementById('pause-icon');
+const pr=document.getElementById('progress'),te=document.getElementById('time-display');
+function fmt(s){return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0');}
+audio.addEventListener('timeupdate',()=>{if(audio.duration){pr.value=(audio.currentTime/audio.duration)*100;te.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);}});
+audio.addEventListener('ended',()=>{pi.style.display='';pai.style.display='none';});
+pb.addEventListener('click',()=>{if(audio.paused){audio.play();pi.style.display='none';pai.style.display='';}else{audio.pause();pi.style.display='';pai.style.display='none';}});
+pr.addEventListener('input',()=>{if(audio.duration)audio.currentTime=(pr.value/100)*audio.duration;});
+</script>
+</body>
+</html>
