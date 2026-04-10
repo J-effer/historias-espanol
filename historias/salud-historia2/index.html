@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Historia Dos: El chequeo de los signos vitales · El chequeo de los signos vitales</title>
+<title>El chequeo de los signos vitales · Español Profesional: Salud</title>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'Georgia',serif;background:#faf9f6;color:#1a1a1a;min-height:100vh;padding:2rem 1rem 5rem}
@@ -41,8 +41,8 @@ h1{font-size:26px;font-weight:normal;color:#1a1a1a;margin-bottom:.4rem;line-heig
 <body>
 <div class="container">
 <a class="back-link" href="../../index.html">← Todas las historias</a>
-<p class="chapter-label">El chequeo de los signos vitales · Historia 2</p>
-<h1>Historia Dos: El chequeo de los signos vitales</h1>
+<p class="chapter-label">Español Profesional: Salud · Historia 2</p>
+<h1>El chequeo de los signos vitales</h1>
 <div class="subtitle"><span>Toca cualquier palabra para ver su traducción</span></div>
 <div class="audio-bar">
   <button class="play-btn" id="play-btn">
@@ -61,134 +61,86 @@ h1{font-size:26px;font-weight:normal;color:#1a1a1a;margin-bottom:.4rem;line-heig
 </div>
 </div>
 <div id="translation-bar"><span class="tw" id="tw"></span><span id="ta"></span></div>
-<audio id="audio" src="https://archive.org/details/historia-4-salud/Historia_2_salud.MP3" preload="auto"></audio>
+<audio id="audio" src="https://archive.org/download/historia-4-salud/Historia_2_salud.MP3" preload="auto"></audio>
 <script>
 const dict={
-    "historia":"history / story",
-    "dos":"two",
-    "el":"the",
-    "chequeo":"check-up",
-    "de":"of / from",
-    "los":"the",
-    "signos":"signs",
-    "vitales":"vital",
-    "ahora":"now",
-    "escuchemos":"let's listen",
-    "la":"the",
-    "enfermera":"nurse",
-    "sarah":"Sarah",
-    "y":"and",
-    "su":"her / his",
-    "rutina":"routine",
-    "escucha":"listen",
-    "después":"after / then",
-    "versión":"version",
-    "intenta":"try",
-    "responder":"to answer",
-    "a":"to / A",
-    "las":"the",
-    "preguntas":"questions",
-    "narración":"narration",
-    "en":"in",
-    "tercera":"third",
-    "persona":"person",
-    "es":"is",
-    "unidad":"unit",
-    "urgencias":"emergencies / ER",
-    "ella":"she",
-    "tiene":"has",
-    "un":"a / an",
-    "paciente":"patient",
-    "nuevo":"new",
-    "que":"that / who",
-    "se":"himself / herself",
-    "llama":"is called",
-    "primero":"first",
-    "revisa":"checks",
-    "presión":"pressure",
-    "arterial":"arterial / blood",
-    "roberto":"Roberto",
-    "poco":"little (un poco = a little)",
-    "alta":"high",
-    "toma":"takes",
-    "temperatura":"temperature",
-    "con":"with",
-    "termómetro":"thermometer",
-    "fiebre":"fever",
-    "anota":"notes down / writes",
-    "todo":"everything / all",
-    "computadora":"computer",
-    "le":"to him / her",
-    "dice":"says",
-    "no":"no / not",
-    "preocupe":"worry",
-    "va":"goes (va a estar = is going to be)",
-    "estar":"to be",
-    "bien":"well / fine",
-    "muy":"very",
-    "eficiente":"efficient",
-    "trabajo":"work / job",
-    "b":"B",
-    "primera":"first",
-    "contada":"told",
-    "por":"by",
-    "soy":"I am",
-    "tengo":"I have",
-    "reviso":"I check",
-    "tomo":"I take",
-    "anoto":"I note down / write",
-    "digo":"I say / tell",
-    "mi":"my",
-    "para":"for",
-    "repetir":"to repeat",
-    "entender":"to understand",
-    "dónde":"where",
-    "trabaja":"works",
-    "cómo":"how",
-    "ojos":"eyes",
-    "baja":"low",
-    "frío":"cold",
-    "o":"or",
-    "qué":"what",
-    "usa":"uses",
-    "al":"to the"
+  "historia":"story","dos":"two","el":"the","chequeo":"check-up","de":"of / from",
+  "los":"the","signos":"signs","vitales":"vital","ahora":"now","escuchemos":"let's listen",
+  "la":"the","enfermera":"nurse","sarah":"Sarah","y":"and","su":"her / his",
+  "rutina":"routine","escucha":"listen","después":"after / then","versión":"version",
+  "intenta":"try","responder":"to answer","a":"to","las":"the","preguntas":"questions",
+  "narración":"narration","en":"in","tercera":"third","persona":"person","es":"is",
+  "unidad":"unit","urgencias":"emergencies / ER","ella":"she","tiene":"has","un":"a / an",
+  "paciente":"patient","nuevo":"new","que":"that / who","se":"himself / herself",
+  "llama":"is called","primero":"first","revisa":"checks","presión":"pressure",
+  "arterial":"blood pressure","roberto":"Roberto","poco":"a little","alta":"high",
+  "toma":"takes","temperatura":"temperature","con":"with","termómetro":"thermometer",
+  "fiebre":"fever","anota":"notes down","todo":"everything","computadora":"computer",
+  "le":"to him / her","dice":"says","no":"no / not","preocupe":"worry",
+  "va":"is going to","estar":"to be","bien":"fine / well","muy":"very",
+  "eficiente":"efficient","trabajo":"work","primera":"first","contada":"told",
+  "por":"by","soy":"I am","tengo":"I have","reviso":"I check","tomo":"I take",
+  "anoto":"I note down","digo":"I say","mi":"my","para":"for","repetir":"to repeat",
+  "entender":"to understand","dónde":"where","trabaja":"works","cómo":"how",
+  "ojos":"eyes","baja":"low","frío":"cold","o":"or","qué":"what","usa":"uses","al":"to the"
 };
-const paras=["Ahora escuchemos la historia de la enfermera Sarah y su rutina. Escucha la historia y después la versión de Sarah. Intenta responder a las preguntas.","A) Narración en tercera persona\nSarah es enfermera en la unidad de urgencias. Ella tiene un paciente nuevo que se llama Roberto. Primero, Sarah revisa la presión arterial de Roberto. La presión es un poco alta. Después, ella toma la temperatura con un termómetro. Roberto tiene fiebre. Sarah anota todo en la computadora. Ella le dice a Roberto: \"No se preocupe, todo va a estar bien\". Sarah es muy eficiente en su trabajo.","B) Narración en primera persona (contada por Sarah)\nSoy enfermera en la unidad de urgencias. Tengo un paciente nuevo que se llama Roberto. Primero, reviso la presión arterial de Roberto. La presión es un poco alta. Después, tomo la temperatura con un termómetro. Roberto tiene fiebre. Anoto todo en la computadora. Le digo a Roberto: \"No se preocupe, todo va a estar bien\". Soy muy eficiente en mi trabajo.","Preguntas para repetir y entender\n¿Dónde trabaja Sarah? Sarah trabaja en la unidad de urgencias.","¿Cómo se llama el paciente? El paciente se llama Roberto.","¿Revisa Sarah los ojos de Roberto? No, ella no revisa los ojos. Ella revisa la presión arterial.","¿Es la presión de Roberto baja? No, la presión no es baja. Es un poco alta.","¿Tiene Roberto frío o fiebre? Roberto tiene fiebre.","¿Qué usa Sarah para tomar la temperatura? Ella usa un termómetro.","¿Qué le dice Sarah al paciente? Ella le dice: \"No se preocupe, todo va a estar bien\"."];
-const storyEl=document.getElementById('story');
-paras.forEach(text=>{
-  const isH=/^[A-C])|^Preguntas/i.test(text.trim());
-  const el=document.createElement(isH?'h2':'p');
-  text.split(/(\s+)/).forEach(token=>{
-    if(/^\s+$/.test(token)){el.appendChild(document.createTextNode(token));return;}
-    const clean=token.replace(/[¿¡.,;:!?()"«»""'\-—]/g,'').toLowerCase().trim();
-    if(!clean){el.appendChild(document.createTextNode(token));return;}
-    const s=document.createElement('span');s.className='w';s.textContent=token;s.dataset.word=clean;el.appendChild(s);
+
+const sections = [
+  { type: "p", text: "Ahora escuchemos la historia de la enfermera Sarah y su rutina. Escucha la historia y después la versión de Sarah. Intenta responder a las preguntas." },
+  { type: "h2", text: "A) Narración en tercera persona" },
+  { type: "p", text: "Sarah es enfermera en la unidad de urgencias. Ella tiene un paciente nuevo que se llama Roberto. Primero, Sarah revisa la presión arterial de Roberto. La presión es un poco alta. Después, ella toma la temperatura con un termómetro. Roberto tiene fiebre. Sarah anota todo en la computadora. Ella le dice a Roberto: \"No se preocupe, todo va a estar bien\". Sarah es muy eficiente en su trabajo." },
+  { type: "h2", text: "B) Narración en primera persona (contada por Sarah)" },
+  { type: "p", text: "Soy enfermera en la unidad de urgencias. Tengo un paciente nuevo que se llama Roberto. Primero, reviso la presión arterial de Roberto. La presión es un poco alta. Después, tomo la temperatura con un termómetro. Roberto tiene fiebre. Anoto todo en la computadora. Le digo a Roberto: \"No se preocupe, todo va a estar bien\". Soy muy eficiente en mi trabajo." },
+  { type: "h2", text: "Preguntas para repetir y entender" },
+  { type: "p", text: "¿Dónde trabaja Sarah? Sarah trabaja en la unidad de urgencias." },
+  { type: "p", text: "¿Cómo se llama el paciente? El paciente se llama Roberto." },
+  { type: "p", text: "¿Revisa Sarah los ojos de Roberto? No, ella no revisa los ojos. Ella revisa la presión arterial." },
+  { type: "p", text: "¿Es la presión de Roberto baja? No, la presión no es baja. Es un poco alta." },
+  { type: "p", text: "¿Tiene Roberto frío o fiebre? Roberto tiene fiebre." },
+  { type: "p", text: "¿Qué usa Sarah para tomar la temperatura? Ella usa un termómetro." },
+  { type: "p", text: "¿Qué le dice Sarah al paciente? Ella le dice: \"No se preocupe, todo va a estar bien\"." }
+];
+
+const storyEl = document.getElementById('story');
+sections.forEach(({ type, text }) => {
+  const el = document.createElement(type);
+  text.split(/(\s+)/).forEach(token => {
+    if (/^\s+$/.test(token)) { el.appendChild(document.createTextNode(token)); return; }
+    const clean = token.replace(/[¿¡.,;:!?()"«»""'\-—]/g,'').toLowerCase().trim();
+    if (!clean) { el.appendChild(document.createTextNode(token)); return; }
+    const s = document.createElement('span');
+    s.className = 'w'; s.textContent = token; s.dataset.word = clean;
+    el.appendChild(s);
   });
   storyEl.appendChild(el);
 });
-const bar=document.getElementById('translation-bar');
-const twEl=document.getElementById('tw'),taEl=document.getElementById('ta');
-let aw=null;
-storyEl.addEventListener('click',e=>{
-  const w=e.target.closest('.w');if(!w)return;
-  if(aw)aw.classList.remove('active');
-  if(aw===w){aw=null;bar.classList.remove('visible');return;}
-  aw=w;w.classList.add('active');
-  const t=dict[w.dataset.word];
-  twEl.textContent=w.dataset.word;taEl.textContent=t?'→ '+t:'(no en diccionario)';
+
+const bar = document.getElementById('translation-bar');
+const twEl = document.getElementById('tw'), taEl = document.getElementById('ta');
+let aw = null;
+storyEl.addEventListener('click', e => {
+  const w = e.target.closest('.w'); if (!w) return;
+  if (aw) aw.classList.remove('active');
+  if (aw === w) { aw = null; bar.classList.remove('visible'); return; }
+  aw = w; w.classList.add('active');
+  const t = dict[w.dataset.word];
+  twEl.textContent = w.dataset.word;
+  taEl.textContent = t ? '→ ' + t : '(no en diccionario)';
   bar.classList.add('visible');
 });
-document.addEventListener('click',e=>{
-  if(!e.target.closest('.w')&&!e.target.closest('#translation-bar')){if(aw)aw.classList.remove('active');aw=null;bar.classList.remove('visible');}
+document.addEventListener('click', e => {
+  if (!e.target.closest('.w') && !e.target.closest('#translation-bar')) {
+    if (aw) aw.classList.remove('active'); aw = null; bar.classList.remove('visible');
+  }
 });
-const audio=document.getElementById('audio'),pb=document.getElementById('play-btn');
-const pi=document.getElementById('play-icon'),pai=document.getElementById('pause-icon');
-const pr=document.getElementById('progress'),te=document.getElementById('time-display');
-function fmt(s){return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0');}
-audio.addEventListener('timeupdate',()=>{if(audio.duration){pr.value=(audio.currentTime/audio.duration)*100;te.textContent=fmt(audio.currentTime)+' / '+fmt(audio.duration);}});
-audio.addEventListener('ended',()=>{pi.style.display='';pai.style.display='none';});
-pb.addEventListener('click',()=>{if(audio.paused){audio.play();pi.style.display='none';pai.style.display='';}else{audio.pause();pi.style.display='';pai.style.display='none';}});
-pr.addEventListener('input',()=>{if(audio.duration)audio.currentTime=(pr.value/100)*audio.duration;});
+const audio = document.getElementById('audio'), pb = document.getElementById('play-btn');
+const pi = document.getElementById('play-icon'), pai = document.getElementById('pause-icon');
+const pr = document.getElementById('progress'), te = document.getElementById('time-display');
+function fmt(s) { return Math.floor(s/60)+':'+Math.floor(s%60).toString().padStart(2,'0'); }
+audio.addEventListener('timeupdate', () => { if (audio.duration) { pr.value = (audio.currentTime/audio.duration)*100; te.textContent = fmt(audio.currentTime)+' / '+fmt(audio.duration); }});
+audio.addEventListener('ended', () => { pi.style.display=''; pai.style.display='none'; });
+pb.addEventListener('click', () => { if (audio.paused) { audio.play(); pi.style.display='none'; pai.style.display=''; } else { audio.pause(); pi.style.display=''; pai.style.display='none'; }});
+pr.addEventListener('input', () => { if (audio.duration) audio.currentTime = (pr.value/100)*audio.duration; });
 </script>
 </body>
 </html>
